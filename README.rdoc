@@ -1,0 +1,63 @@
+RtCapistrano
+============
+
+RtCapistrano is based on the mt-capistrano gem (0.0.5). 'after' methods were
+added to streamline the setup and deployment of Rails apps on (mt) Media Temple's
+(gs) GridServer Ruby on Rails container. This gem makes it as easy as entering the following commands for initial deployment without having to execute any 'mtr' commands in between:
+
+	cap deploy:setup
+	cap deploy:cold
+
+
+Install
+=======
+
+	gem install partydrone-rt_capistrano --source=http://gems.github.com
+
+
+Example
+=======
+
+## Sample config/deploy.rb file:
+
+	require 'rt_capistrano'
+
+	set :site,         "00000"
+	set :application,  "app_name"
+	set :webpath,      "app_name.your_domain.com"
+	set :domain,       "your_domain.com"
+	set :user,         "serveradmin%your_domain.com"
+	set :password,     "serveradmin_password"
+
+	# repository elsewhere
+	set :scm, :git
+	set :repository, "your_git_repository"
+	set :branch, "master"
+	set :deploy_via, :remote_cache
+
+	# these shouldn't be changed
+	role :web, "#{domain}"
+	role :app, "#{domain}"
+	role :db,  "#{domain}", :primary => true
+	set :deploy_to,    "/home/#{site}/containers/rails/#{application}"
+
+
+	namespace :deploy do
+	  desc "Creates the database configuration file in the application's config directory."
+	  task :update_config, :roles => :app do
+	    database_yml = <<-CMD
+	      production:
+	        adapter: mysql
+	        database: your_production_database
+	        username: your_database_username
+	        password: your_database_password
+	        host: your_internal_database_url
+	    CMD
+	    put database_yml, "#{release_path}/config/database.yml"
+	  end
+	  after "deploy:update_code", "deploy:update_config"
+	end
+
+
+
+Copyright (c) 2008 Andrew Porter, released under the MIT license
