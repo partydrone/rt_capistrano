@@ -5,12 +5,13 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "rt_capistrano"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
-    gem.email = "aporter@rapidturtle.com"
+    gem.summary = %Q{Simple Capistrano deployment on (mt) Media Temple}
+    gem.description = %Q{Use native capistrano tasks with Media Temple's (gs) Grid-Service accounts.}
+    gem.email = "partydrone@me.com"
     gem.homepage = "http://github.com/partydrone/rt_capistrano"
     gem.authors = ["Andrew Porter"]
-    gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
+    gem.add_dependency "capistrano", ">= 0"
+    gem.add_development_dependency "shoulda", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
